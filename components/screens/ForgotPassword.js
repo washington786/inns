@@ -1,11 +1,29 @@
 import React from 'react'
-import { ScrollView,View,Image,StatusBar,Text,TextInput,StyleSheet,TouchableOpacity} from 'react-native'
+import { ScrollView,View,
+    Image,StatusBar,Text,
+    TextInput,StyleSheet,
+    TouchableOpacity,
+    ToastAndroid
+} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {Icon} from 'react-native-elements';
 import circles from '../Images/sign_circle.png';
 import btCircle from '../Images/circles.png'
+import {auth} from '../firebase-config';
 
 const ForgotPassword = ({navigation}) => {
+
+    const [emailAddress, setEmailAddress] = React.useState('');
+    
+    const handleForgotPassword=()=>{
+        auth.sendPasswordResetEmail(emailAddress).then(()=>{
+            ToastAndroid.show('Email reset link has been sent to ' + emailAddress, 2000)
+            navigation.navigate('resetSuccessScreen')
+        }).catch((err)=>{
+            ToastAndroid.CENTER.show(err.message);
+        })
+    }
+
     return (
 
         <SafeAreaView>
@@ -73,6 +91,8 @@ const ForgotPassword = ({navigation}) => {
                             <TextInput
                                 style={{flex: 1, paddingHorizontal: 12}}
                                 placeholder={'Email Address'}
+                                value={emailAddress}
+                                onChangeText={(text)=>setEmailAddress(text)}
                             />
 
                         </View>
@@ -82,7 +102,7 @@ const ForgotPassword = ({navigation}) => {
                     <View style={{alignSelf:'center', justifyContent: 'center', position: 'relative', margin: 10, width: '70%',top: 10}}>
 
                         {/* button to submit */}
-                        <TouchableOpacity onPress={()=>{navigation.navigate('resetSuccessScreen')}} style={styles.buttonCustom}><Text style={styles.buttonText}>SUBMIT</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={handleForgotPassword} style={styles.buttonCustom}><Text style={styles.buttonText}>SUBMIT</Text></TouchableOpacity>
 
                     </View>
 

@@ -3,36 +3,38 @@ import { SafeAreaView, ScrollView, Text,View,TouchableOpacity, TextInput, StyleS
 import Icons from 'react-native-vector-icons/MaterialIcons'
 // import Datepicker from 'react-native-datepicker'
 import DateTimePicker from '@react-native-community/datetimepicker';
-import FontIcons from 'react-native-vector-icons/Ionicons'
+import FontIcons from 'react-native-vector-icons/Ionicons';
 import FonIcons from 'react-native-vector-icons/Fontisto'
 import RBSheet from "react-native-raw-bottom-sheet";
 import PaymentBottomSheet from '../BottomPaymentSheet/PaymentBottomSheet';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {db} from '../firebase-config';
 
-const BookingContainerScreen = ({navigation}) => {
+// moment
+import Moment from 'react-moment';
+import moment from 'moment';
 
-    // bottom sheet
+
+const BookingContainerScreen = ({navigation,route}) => {
+
+    const {room} = route.params;
+    const {hotel} = route.params
+
     const refRBSheet = useRef();
 
-    // date
     const [checkInDate, setCheckInDate] = useState(new Date());
-    // const [checkOutDate, setCheckOutDate] = useState(new Date(1598051730000));
     const [mode, setMode] = useState('checkInDate');
     const [show, setShow] = useState(false);
     const [dateText, setDateText] = useState('Select Date')
-    //const [dateText2, setDateText2] = useState('Select Date')
 
      const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || checkInDate;
         setShow(Platform.OS === 'ios');
         setCheckInDate(currentDate);
-        //setCheckOutDate(currentDate);
 
         let tempDate = new Date(currentDate);
         let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
         setDateText(fDate);
-        //setDateText2(fDate);
-
     };
 
      const showMode = (currentMode) => {
@@ -51,7 +53,10 @@ const BookingContainerScreen = ({navigation}) => {
     // number of guests code 
     const [noAdults, setNoAdults] = useState(0);
     const [noChild, setNoChild] = useState(0);
-    const [noRooms, setNoRooms] = useState(1);
+    const [noNights, setNoNights] = useState(1);
+    const [note,setNote] = useState('');
+
+    const checkOutDate = moment(checkInDate).add(noNights,'days').format('DD-MMM-YYYY');
 
     return (
         <SafeAreaView style={{backgroundColor: 'white'}}>
@@ -245,65 +250,6 @@ const BookingContainerScreen = ({navigation}) => {
 
                     </View>
 
-                    {/* number of rooms */}
-                    <View style={{marginHorizontal: 20, 
-                        marginVertical:10, display:'flex',
-                        flexDirection: 'column',alignItems:'flex-start',
-                        backgroundColor:'#F9F9F9', padding:5,
-                        borderRadius:2
-                        }}>
-
-                        <Text style={{fontSize:14, 
-                            paddingLeft:5,
-                            color:'rgba(0, 0, 0, 0.45)'}}>Number of Rooms</Text>
-
-                        <View style={{
-                            marginVertical:5, display:'flex',
-                            flexDirection: 'row',alignItems:'center',
-                            backgroundColor:'white', padding:5,
-                            borderRadius:2, width:'100%', height:40, elevation: 6
-                            }} >
-
-                            <FonIcons name='room' size={20} style={{marginHorizontal: 10}}/>
-                            
-                            <View style={{paddingHorizontal:5}}>
-                                <Text style={{fontSize:12, fontWeight: 'bold'}}>Rooms</Text>
-                                <Text style={{fontSize:10}}>A Max of 5rooms</Text>
-                            </View>
-
-                            <View style={{width:'50%', alignItems:'center', display: 'flex', flexDirection:'row', 
-                            justifyContent: 'flex-end', alignContent:'space-between'}}>
-
-                                <TouchableOpacity
-                                    onPress={() =>setNoRooms(Math.max(1, noRooms-1))}
-                                    style={{backgroundColor:'#C99E30', borderRadius:25, width:30, 
-                                    height:30, textAlign:'center', alignItems:'center', justifyContent: 'center'}}
-                                    >
-
-                                    <Text style={{textAlign:'center', 
-                                    alignItems:'center', justifyContent: 'center', color:'white', fontWeight: 'bold', fontSize:18}}>-</Text>
-
-                                </TouchableOpacity>
-
-                                <Text style={{paddingHorizontal:20}}>{noRooms}</Text>
-                                
-                                <TouchableOpacity
-                                    onPress={() =>setNoRooms(noRooms+1)}
-                                    style={{backgroundColor:'#C99E30', borderRadius:25, width:30, 
-                                    height:30, textAlign:'center', alignItems:'center', justifyContent: 'center'}}
-                                    >
-
-                                        <Text style={{textAlign:'center', 
-                                        alignItems:'center', justifyContent: 'center', color:'white', fontWeight: 'bold', fontSize:18}}>+</Text>
-
-                                </TouchableOpacity>
-                                
-                            </View>
-
-                        </View>
-
-                    </View>
-
                     {/* number of nights */}
                     <View style={{marginHorizontal: 20, 
                         marginVertical:10, display:'flex',
@@ -334,7 +280,7 @@ const BookingContainerScreen = ({navigation}) => {
                             justifyContent: 'flex-end', alignContent:'space-between'}}>
 
                                 <TouchableOpacity
-                                    onPress={() =>setNoRooms(Math.max(1, noRooms-1))}
+                                    onPress={() =>setNoNights(Math.max(1, noNights-1))}
                                     style={{backgroundColor:'#C99E30', borderRadius:25, width:30, 
                                     height:30, textAlign:'center', alignItems:'center', justifyContent: 'center'}}
                                     >
@@ -344,10 +290,10 @@ const BookingContainerScreen = ({navigation}) => {
 
                                 </TouchableOpacity>
 
-                                <Text style={{paddingHorizontal:20}}>{noRooms}</Text>
+                                <Text style={{paddingHorizontal:20}}>{noNights}</Text>
                                 
                                 <TouchableOpacity
-                                    onPress={() =>setNoRooms(noRooms+1)}
+                                    onPress={() =>setNoNights(noNights+1)}
                                     style={{backgroundColor:'#C99E30', borderRadius:25, width:30, 
                                     height:30, textAlign:'center', alignItems:'center', justifyContent: 'center'}}
                                     >
@@ -391,17 +337,20 @@ const BookingContainerScreen = ({navigation}) => {
                             <TextInput
                                 placeholder={'Enter your message here.'}
                                 multiline={true}
+                                onChangeText={(text)=>setNote(text)}
+                                value={note}
                             />
 
                         </View>
                         
                     
-                    </View>
+                    </View>   
 
                     {/* button */}
                     <View style={{alignSelf:'center', justifyContent: 'center', position: 'relative', margin: 10, width: '60%',top: 10}}>
                         <TouchableOpacity style={styles.buttonCustom}
-                        onPress={() => refRBSheet.current.open()}
+                        // onPress={() => refRBSheet.current.open()}
+                        onPress={() =>navigation.navigate('bookingConfirmationScreen',{room,hotel,note:note,noNights:noNights,noChild:noChild,noAdults:noAdults,checkInDate:checkInDate,checkOutDate:checkOutDate})}
                         ><Text style={styles.buttonText}>CONTINUE</Text></TouchableOpacity>
                     </View>
 
@@ -494,7 +443,6 @@ const BookingContainerScreen = ({navigation}) => {
 
                     </View>
                     
-
                 </ScrollView>
 
             </View>

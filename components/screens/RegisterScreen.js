@@ -1,13 +1,56 @@
 import React, { useState } from 'react';
-import { View,Text, ScrollView,Image, StatusBar, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View,Text, ScrollView,Image, StatusBar, TextInput, TouchableOpacity, StyleSheet,ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import circles from '../Images/sign_circle.png';
 import {Icon} from 'react-native-elements';
+import { auth, db } from '../firebase-config';
+import * as yup from 'yup';
+import { Formik } from 'formik';
+
 
 const RegisterScreen = ({navigation}) => {
 
+    const [visible, setVisible] = useState(false);
+
     const [passwordSecured, setPasswordSecured] = useState(true)
 
+    const validateInputs=yup.object({
+        email: yup.string().required('email is required!').email('enter valid email!'),
+        password: yup.string().required('password is required!').min(6,({min})=>'password must at least be' + `${min}`+ 'characters'),
+        fullNames: yup.string().required('Field can not be empty'),
+        phoneNo: yup.string().required('Field can not be empty').max(10)
+    })
+
+    
+    const handleRegistration= async (data) => {
+        const {Uid,email,password,fullNames,phoneNo} = data;
+       
+        try{
+            if(visible===false){
+                setVisible(true)
+                await auth.createUserWithEmailAndPassword(email.trim().toLowerCase(), password)
+                .then(res=>{
+                    db.ref('/users').child(res.user.uid).set({
+                        Email:email.trim().toLowerCase(),
+                        fullNames: fullNames,
+                        phoneNo: phoneNo,
+                        Uid: res.user.uid
+                    })
+                    navigation.navigate('bottomTabsScreen')
+                    setVisible(false)
+                    }
+                );
+                
+                console.log(email, password, fullNames, phoneNo);
+                
+            }
+        }
+        catch(err){
+            console.log(err.message);
+            setVisible(false);
+        }
+    }
+    
     return (
         <SafeAreaView style={{height: '100%'}}>
 
@@ -29,7 +72,19 @@ const RegisterScreen = ({navigation}) => {
 
                             </View>
 
-                            <View style={{alignSelf:'center', justifyContent: 'center', position: 'relative', margin: 10, width: '85%'}}>
+                            <Formik 
+                                initialValues={{email: '',password: '',fullNames:'',phoneNo:''}}
+                                validationSchema={validateInputs}
+                                onSubmit={(value,action) =>{
+                                    action.resetForm()
+                                    handleRegistration(value)
+                                }}
+                            
+                            >
+
+                            {(props)=>(
+                                <View>
+                                <View style={{alignSelf:'center', justifyContent: 'center', position: 'relative', margin: 10, width: '85%'}}>
 
                                 <View style={{
                                 width: '100%', height: 44,backgroundColor: '#F9F9F9',borderRadius:15,shadowColor:'#000',
@@ -45,8 +100,11 @@ const RegisterScreen = ({navigation}) => {
                                     />
 
                                     <TextInput
+                                        value={props.values.email}
+                                        onChangeText={props.handleChange('email')}
                                         style={{flex: 1, paddingHorizontal: 12}}
                                         placeholder={'Email Address'}
+                                        textContentType='emailAddress'
                                     />
 
                                 </View>
@@ -65,8 +123,11 @@ const RegisterScreen = ({navigation}) => {
                                     />
 
                                     <TextInput
+                                        value={props.values.fullNames}
+                                        onChangeText={props.handleChange('fullNames')}
                                         style={{flex: 1, paddingHorizontal: 12}}
                                         placeholder={'Full Names'}
+                                        textContentType='name'
                                     />
 
                                 </View>
@@ -85,8 +146,11 @@ const RegisterScreen = ({navigation}) => {
                                     />
 
                                     <TextInput
+                                        value={props.values.phoneNo}
+                                        onChangeText={props.handleChange('phoneNo')}
                                         style={{flex: 1, paddingHorizontal: 12}}
                                         placeholder={'Phone Number'}
+                                        textContentType='telephoneNumber'
                                     />
 
                                 </View>
@@ -105,6 +169,8 @@ const RegisterScreen = ({navigation}) => {
                                     />
 
                                 <TextInput
+                                    value={props.values.password}
+                                    onChangeText={props.handleChange('password')}
                                     style={{flex: 1, paddingHorizontal: 12}}
                                     placeholder={'Password'}
                                     secureTextEntry={passwordSecured}
@@ -127,20 +193,29 @@ const RegisterScreen = ({navigation}) => {
 
                                 </TouchableOpacity>
 
-
                             </View>
 
                         </View>
 
-                        <View style={{alignSelf:'center', justifyContent: 'center', position: 'relative', margin: 10, width: '70%',top: 10}}>
+                         <View style={{alignSelf:'center', justifyContent: 'center', position: 'relative', margin: 10, width: '70%',top: 10}}>
 
-                        {/* button to sign in */}
-                        <TouchableOpacity style={styles.buttonCustom}
-                            onPress={() =>{navigation.navigate('bottomTabsScreen')}}
-                        ><Text style={styles.buttonText}>SIGN UP</Text></TouchableOpacity>
+                            {/* button to sign in */}
+                            <TouchableOpacity style={styles.buttonCustom}
+                                onPress={props.handleSubmit}>
+                                <Text style={styles.buttonText}>SIGN UP</Text>
+                            </TouchableOpacity>
+                            {
+                                visible&&(<View style={{marginTop: 40, alignItems:'center'}}>
+                                <ActivityIndicator size="large" color="#000" animating={visible}/>
+                            </View>)
+                            }
+                            
 
+                        </View>
                     </View>
-
+                            )}
+                            
+                        </Formik>
                     </ScrollView>
 
                     <View style={{alignSelf:'flex-start', justifyContent: 'flex-start', position: 'relative',

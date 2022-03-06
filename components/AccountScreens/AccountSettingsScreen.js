@@ -1,20 +1,49 @@
-// import React from 'react';
-import {useState} from 'react-native';
-import { SafeAreaView,View,Text, Dimensions,TouchableOpacity,StyleSheet,ScrollView,ActivityIndicator} from 'react-native';
+import React,{useState} from 'react';
+import {
+    SafeAreaView,View,Text, 
+    Dimensions,TouchableOpacity,StyleSheet,
+    ScrollView,ActivityIndicator,
+    ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ico from 'react-native-vector-icons/Fontisto';
 import testImage from '../Images/dash/bedroom.jpg';
 import { Input } from 'react-native-elements';
-import { Button } from 'react-native';
-import React from 'react';
+// import { Button } from 'react-native';
+import {auth,db} from '../firebase-config';
 
 const AccountSettingsScreen = ({navigation}) => {
+    
     const windowWidth = Dimensions.get('screen').width;
     const windowHeight = Dimensions.get('screen').height;
 
-    const [submitSpinner, setSubmitSpinner] = React.useState(false);
+    // values
+    const [Email,setEmail] = useState();
+    const [fullName, setFullNames] = useState();
+    const [phoneNo,setPhone] = useState();
+
+    // spinner
+    const [submitSpinner, setSubmitSpinner] = useState(false);
+
+    const user = auth.currentUser.uid;
+
+    React.useEffect(()=> {
+        db.ref('/users/' + user).on('value',snap => {
+            setEmail(snap.val() && snap.val().Email);
+            setPhone(snap.val().phoneNo);
+            setFullNames(snap.val().fullNames)
+        })
+    },[])
+
+    const UpdateUserAccount=()=>{
+        db.ref('/users/' + user).update({
+            Email: Email,
+            phoneNo: phoneNo,
+            fullNames: fullName
+        })
+        ToastAndroid.show('Successfully updated details.', 5000);
+    }
 
     return (
         <SafeAreaView style={{backgroundColor: 'white'}}>
@@ -46,7 +75,7 @@ const AccountSettingsScreen = ({navigation}) => {
                         </View>
 
                     </View>
-
+                    
                     <View style={{marginHorizontal:20, marginVertical:10}}>
 
                         <Input
@@ -62,6 +91,8 @@ const AccountSettingsScreen = ({navigation}) => {
                             keyboardType={'email-address'}
                             autoCapitalize={'none'}
                             textContentType='emailAddress'
+                            value={Email}
+                            onChangeText={text=>setEmail(text)}
                         />
 
                         <Input
@@ -77,21 +108,8 @@ const AccountSettingsScreen = ({navigation}) => {
                             keyboardType={'name-phone-pad'}
                             autoCapitalize={'none'}
                             textContentType='name'
-                        />
-
-                        <Input
-                            placeholder={'Maluleka'}
-                            style={{paddingLeft:8}}
-                            leftIcon={
-                                <Icon
-                                    name='account-box'
-                                    size={25}
-                                    color={'#000'}/>
-                            }
-                            autoCorrect={false}
-                            keyboardType={'name-phone-pad'}
-                            autoCapitalize={'none'}
-                            textContentType='name'
+                            value={fullName}
+                            onChangeText={e=>setFullNames(e)}
                         />
 
                         <Input
@@ -107,15 +125,13 @@ const AccountSettingsScreen = ({navigation}) => {
                             keyboardType={'phone-pad'}
                             autoCapitalize={'none'}
                             textContentType='telephoneNumber'
+                            value={phoneNo}
+                            onChangeText={text=>setPhone(text)}
                         />
 
                         <TouchableOpacity
                             style={styles.updateButton}
-                            onPress={() =>{
-                                if(2+2==4){
-                                    setSubmitSpinner(!submitSpinner);
-                                }
-                            }}
+                            onPress={UpdateUserAccount}
                         >
                         <Text style={styles.buttonText}>UPDATE</Text>{
                             submitSpinner?(<ActivityIndicator
@@ -126,10 +142,7 @@ const AccountSettingsScreen = ({navigation}) => {
                         }
                         </TouchableOpacity>
 
-                    </View>
-                    
-
-
+                    </View> 
 
                  </ScrollView>
             </View>

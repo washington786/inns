@@ -4,6 +4,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 import TopNavigatorDashboardScreen from './TopNavigatorDashboardScreen';
 import TopNavigatorMapsScreens from './TopNavigatorMapsScreens';
+import Hotels from '../Hotels/Index';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -18,7 +19,7 @@ const TopNavigationScreen = () => {
                 tabBarActiveTintColor:'#F6C954'
             }}
         >
-            <Tab.Screen name="Hotels" component={TopNavigatorDashboardScreen} />
+            <Tab.Screen name="Hotels" component={Hotels} />
             <Tab.Screen name="Map" component={TopNavigatorMapsScreens} />
         </Tab.Navigator>
     )

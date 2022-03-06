@@ -1,11 +1,12 @@
+import React,{useEffect} from 'react';
 import {Text, TouchableOpacity, View,StyleSheet,FlatList } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Fontisto from 'react-native-vector-icons/Fontisto'
-
 import Hotels from '../Hotels/Index';
 import data from '../Data/hotelData';
 
 const TopNavigatorDashboardScreen = ({navigation}) => {
+    
     return (
         <SafeAreaView style={{backgroundColor: 'white', height: '100%'}}>
 
@@ -31,10 +32,10 @@ const TopNavigatorDashboardScreen = ({navigation}) => {
                         
                         <FlatList
                         style={{marginBottom:150}}
-                        data={data}
+                        data={hotel}
                         renderItem={
                             ({item})=>
-                            <TouchableOpacity onPress={()=>navigation.navigate('selectedDetailsScreen')}><Hotels hotels={item}
+                            <TouchableOpacity onPress={()=>navigation.navigate('selectedDetailsScreen')}><Hotels hotel={item}
                             /></TouchableOpacity>
                             }
                         />

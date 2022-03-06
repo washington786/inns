@@ -1,12 +1,28 @@
 import React from 'react'
-import { SafeAreaView,View,Text, Dimensions,ScrollView,TouchableOpacity } from 'react-native'
+import { SafeAreaView,View,Text, Dimensions,ScrollView,TouchableOpacity,StyleSheet,ToastAndroid } from 'react-native'
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import IonIcons from 'react-native-vector-icons/Ionicons';
+import Modal from 'react-native-modal';
+import {auth} from '../firebase-config';
 
 const AccountScreen = ({navigation}) => {
 
     const windowWidth = Dimensions.get('screen').width;
     const windowHeight = Dimensions.get('screen').height;
+
+    const [modalVisible, setModalVisible] = React.useState(false);
+    
+    const toggleModal =()=>{
+        setModalVisible(!modalVisible);
+    }
+
+    const handleSignOut=()=>{
+        auth.signOut().then(()=>{
+            ToastAndroid.show('account signed out.', 2000);
+            navigation.navigate('loginScreen')
+        })
+    }
 
     return (
         <SafeAreaView style={{backgroundColor: 'white', height: windowHeight, width: windowWidth}}>
@@ -52,7 +68,7 @@ const AccountScreen = ({navigation}) => {
                             </TouchableOpacity>
 
                             
-                            <TouchableOpacity onPress={()=>navigation.navigate('addCardScreen')}>
+                            <TouchableOpacity onPress={()=>navigation.navigate('notificationScreen')}>
                                 <View style={{
                                     display:'flex',
                                     flexDirection: 'row',alignItems:'center', borderBottomWidth: 1, 
@@ -60,8 +76,8 @@ const AccountScreen = ({navigation}) => {
 
                                     <View style={{display:'flex',flexDirection: 'row',alignItems:'center'}}>
 
-                                        <Icons name='credit-card-check' size={35} style={{paddingRight:20,color:'#C99E30'}}/>
-                                        <Text style={{fontSize:15, fontWeight: 'bold',textAlign: 'center',paddingBottom: 5,paddingTop:10,marginVertical:10,color:'rgba(0, 0, 0, 0.55)' }}>Payment</Text>
+                                        <IonIcons name='notifications' size={35} style={{paddingRight:20,color:'#C99E30'}}/>
+                                        <Text style={{fontSize:15, fontWeight: 'bold',textAlign: 'center',paddingBottom: 5,paddingTop:10,marginVertical:10,color:'rgba(0, 0, 0, 0.55)' }}>Notifications</Text>
 
                                     </View>
 
@@ -70,7 +86,7 @@ const AccountScreen = ({navigation}) => {
                             </TouchableOpacity>
 
 
-                            <TouchableOpacity onPress={()=>('')}>
+                            <TouchableOpacity onPress={()=>navigation.navigate('helpScreen')}>
                                  <View style={{
                                 display:'flex',
                                 flexDirection: 'row',alignItems:'center', borderBottomWidth: 1, 
@@ -90,7 +106,7 @@ const AccountScreen = ({navigation}) => {
                             </TouchableOpacity>
                            
 
-                            <TouchableOpacity onPress={()=>('')}>
+                            <TouchableOpacity onPress={()=>navigation.navigate('aboutAppScreen')}>
                                 <View style={{
                                 display:'flex',
                                 flexDirection: 'row',alignItems:'center', borderBottomWidth: 1, 
@@ -112,7 +128,7 @@ const AccountScreen = ({navigation}) => {
 
                         </View>
 
-                        <TouchableOpacity onPress={()=>('')}>
+                        <TouchableOpacity onPress={toggleModal}>
                             <View style={{
                                     display:'flex',
                                     flexDirection: 'row',alignItems:'center', marginHorizontal: 10, marginVertical:10, marginTop:60, justifyContent:'space-between'}}>
@@ -127,7 +143,41 @@ const AccountScreen = ({navigation}) => {
                                     
                             </View>
                         </TouchableOpacity>
-                        
+
+                        {/* modal */}
+                        <Modal
+                            isVisible={modalVisible}
+                            animationIn='zoomIn'
+                            animationOut='zoomOut'
+                        >
+
+                                <View style={styles.modalView}>
+
+                                    <Text style={{fontSize: 16, fontWeight: 'bold'}}>Sign Out</Text>
+
+                                    <Text style={{marginVertical:10}}>You are about to sign out of the application.{"\n"} {"\n"}Do you want to continue to sign out?</Text>
+
+                                    <View style={{flexDirection: 'row',justifyContent:'flex-end'}}>
+
+                                        <TouchableOpacity
+                                            style={styles.modalButton}
+                                            onPress={()=>setModalVisible(false)}
+                                            >
+                                            <Text style={styles.modalButtonText}>Cancel</Text>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity
+                                            style={styles.modalButton2}
+                                            onPress={handleSignOut}
+                                            >
+                                            <Text style={styles.modalButtonText}>Yes</Text>
+                                        </TouchableOpacity>
+
+                                    </View>
+
+                                </View>
+                            
+                        </Modal>
 
                     </View>
 
@@ -138,5 +188,47 @@ const AccountScreen = ({navigation}) => {
         </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+    modalView:{
+        backgroundColor: 'white',
+        borderRadius:8,
+        paddingHorizontal:10,
+        paddingVertical:14,
+        shadowColor:'#000',
+        shadowOffset: {width:0, height:2},
+        shadowOpacity:0.25,
+        shadowRadius:3.84,
+        elevation:5
+    },
+    modalButton:{
+        backgroundColor: '#222f3e',
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        borderRadius: 4,
+        marginLeft: 10,
+        elevation: 2,
+        shadowColor:'#000',
+        shadowOffset: {width:2,height:2},
+        shadowOpacity:0.25,
+        shadowRadius:3.5,
+    },
+    modalButton2:{
+        backgroundColor: '#ff0000',
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        borderRadius: 4,
+        marginLeft: 10,
+        elevation: 2,
+        shadowColor:'#000',
+        shadowOffset: {width:2,height:2},
+        shadowOpacity:0.25,
+        shadowRadius:3.5,
+    },
+    modalButtonText:{
+        color: '#fff',
+        fontSize: 16
+    }
+})
 
 export default AccountScreen

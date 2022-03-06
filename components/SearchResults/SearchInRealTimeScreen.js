@@ -49,8 +49,8 @@ const SearchInRealTimeScreen = ({navigation}) => {
                     <View style={{
                     width: '95%', height: 400,borderRadius:5,
                     paddingHorizontal:10,display: 'flex',flexDirection: 'row',padding:10,
-                    alignItems:'center', marginLeft:15,marginTop:0,
-                    // zIndex:200
+                    alignItems:'center', marginLeft:15,marginTop:-150,
+                    zIndex:200
                     
                     }}>
 
@@ -76,8 +76,8 @@ const SearchInRealTimeScreen = ({navigation}) => {
                                     // zIndex:100
                                 }
                             }}
-                            suppressDefaultStyles
-                            renderItem={(item)=><GoogleSuggestion item={item}/>}
+                            // suppressDefaultStyles
+                            renderItem={({item})=><GoogleSuggestion item={item}/>}
                         />
 
                     </View>
