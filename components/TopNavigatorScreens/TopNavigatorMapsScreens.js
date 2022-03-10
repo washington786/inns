@@ -54,43 +54,43 @@ const TopNavigatorMapsScreens = ({navigation}) => {
       // const data = props.data;
       const [hotel,setHotel] = useState([]);
 
-    //   useEffect(()=>{
-    //       db.ref('/hotels/').on('value',snap=>{
-    //       const hotelList = [];
-    //       const info = snap.val();
+      useEffect(()=>{
+          db.ref('/hotels/').on('value',snap=>{
+          const hotelList = [];
+          const info = snap.val();
           
-    //        for(let x in info){
-    //            hotelList.push({
-    //               breakFast: info[x].breakFast,
-    //               city: info[x].city,
-    //               computer_facility: info[x].computer_facility,
-    //               name: info[x].name,
-    //               phone_no: info[x].phone_no,
-    //               display_image_url: info[x].display_image_url,
-    //               description: info[x].description,
-    //               fitness: info[x].fitness,
-    //               img1: info[x].img1,
-    //               img2: info[x].img2,
-    //               img4: info[x].img4,
-    //               latitude: info[x].latitude,
-    //               longitude: info[x].longitude,
-    //               parking: info[x].parking,
-    //               pet: info[x].pet,
-    //               phone_no: info[x].phone_no,
-    //               province: info[x].province,
-    //               smoking_room: info[x].smoking_room,
-    //               town: info[x].town,
-    //               telephone_no: info[x].telephone_no,
-    //               swimming: info[x].swimming,
-    //               wifi: info[x].wifi,
-    //               suburb: info[x].suburb, 
-    //               key: x
-    //            })
-    //        }
-    //           setHotel(hotelList);
-    //           console.log(hotelList);
-    //       })
-    //   },[])
+           for(let x in info){
+               hotelList.push({
+                  breakFast: info[x].breakFast,
+                  city: info[x].city,
+                  computer_facility: info[x].computer_facility,
+                  name: info[x].name,
+                  phone_no: info[x].phone_no,
+                  display_image_url: info[x].display_image_url,
+                  description: info[x].description,
+                  fitness: info[x].fitness,
+                  img1: info[x].img1,
+                  img2: info[x].img2,
+                  img4: info[x].img4,
+                  latitude: info[x].latitude,
+                  longitude: info[x].longitude,
+                  parking: info[x].parking,
+                  pet: info[x].pet,
+                  phone_no: info[x].phone_no,
+                  province: info[x].province,
+                  smoking_room: info[x].smoking_room,
+                  town: info[x].town,
+                  telephone_no: info[x].telephone_no,
+                  swimming: info[x].swimming,
+                  wifi: info[x].wifi,
+                  suburb: info[x].suburb, 
+                  key: x
+               })
+           }
+              setHotel(hotelList);
+              console.log(hotelList);
+          })
+      },[])
 
     const MapCarouselCard=({hotel})=>{
         return (
@@ -102,14 +102,14 @@ const TopNavigatorMapsScreens = ({navigation}) => {
                     <View style={{marginHorizontal:10, marginVertical:15}}>
                         <View style={{display: 'flex', flexDirection: 'row', textAlign: 'center', justifyContent: 'flex-start', alignItems: 'center'}}>
                             <Icons name='hotel' size={20} color={'grey'}/>
-                            <Text style={{fontWeight: 'bold',fontSize:18,padding:5, letterSpacing:2}}>{hotel.name}</Text>
+                            <Text style={{fontWeight: 'bold',fontSize:18,padding:5, letterSpacing:2}}>name</Text>
                         </View>
 
                         {/* description */}
-                        <Text style={{fontWeight: '100',fontSize:10, paddingTop:5, color:'grey', width:width*0.49, paddingVertical:10}}>{hotel.description}</Text>
+                        <Text style={{fontWeight: '100',fontSize:10, paddingTop:5, color:'grey', width:width*0.49, paddingVertical:10}}>description</Text>
 
                         {/* price */}
-                        <Text style={{fontWeight: 'bold',fontSize:15,letterSpacing:0.5, paddingTop:5, color:'#C99E30'}}>{hotel.suburb}, {hotel.town}</Text>
+                        <Text style={{fontWeight: 'bold',fontSize:15,letterSpacing:0.5, paddingTop:5, color:'#C99E30'}}>town and suburb</Text>
                             
                     </View>
 
@@ -151,7 +151,7 @@ const TopNavigatorMapsScreens = ({navigation}) => {
 
                 <FlatList
                     ref={flatList}
-                    data={hotel}
+                    data={places}
                     renderItem={({item})=><MapCarousel data={item}/>}
                     horizontal 
                     showsHorizontalScrollIndicator={false}

@@ -3,9 +3,8 @@ import { SafeAreaView,View,Text, Dimensions,TouchableOpacity,StyleSheet,ScrollVi
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CheckBox } from 'react-native-elements'
-import { CreditCardInput, LiteCreditCardInput } from "react-native-credit-card-input";
+import { CreditCardInput} from "react-native-credit-card-input";
 import {db} from '../firebase-config';
-// import { Secret_key, STRIPE_PUBLISHABLE_KEY } from './keys';
 
 const Secret_key = "sk_test_51JFTx2ELhasCFMKIlq1RuTrK60m9VhC64AbCjwxLxUKxRcbgFaasRDR3pFHyp8lcHFA5Zsjb2liadbxEETUEUbjl00SJXPtTDV";
 
@@ -13,9 +12,6 @@ const STRIPE_PUBLISHABLE_KEY ="pk_test_51JFTx2ELhasCFMKI2oqVyeeMrRREgFVWHxxQRRap
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
-
-// use useEffect
-
 
 // components
 const CURRENCY = 'USD';
@@ -74,10 +70,13 @@ const StripePaymentScreen = ({navigation,route}) => {
     const [CardInput, setCardInput] = React.useState({});
 
     const [bookings, setBookings] = useState([]);
+    const booking = route.params;
 
-    const notificationKey =route.params;
+    // const notificationKey =route.params;
+    const key = booking.key;
+    // const dateIn = moment(booking.check_in_date).format('DD-MMM-YYYY');
 
-    console.log("================",notificationKey,"========================")
+    // console.log("================key: ",key,"========================")
     // const database = db.ref(`/bookings/${notificationKey}/`);
     // console.log(database); 
 
@@ -115,7 +114,7 @@ const StripePaymentScreen = ({navigation,route}) => {
 
     // routes
     // const hotel = route.params;
-    const room = route.params;
+    // const room = route.params;
     // const totalPrice = route.params;
 
     for(let i in bookings){
@@ -158,14 +157,14 @@ const StripePaymentScreen = ({navigation,route}) => {
           {
             // alert("Payment Successfully");
             ToastAndroid.show('Your payment was successfully.', 2000);
-            console.log(notificationKey);
-            db.ref('bookings').child(notificationKey).update({
-                payment_status: 'payed',
+            // console.log(key);
+            db.ref('/bookings/').child(key).update({
+                payment_status: 'paid',
                 booking_status: 'successful'
-            }).then((response)=>{
-              console.log(response,'res')
+            }).then(()=>{
+              navigation.navigate('paymentSuccessful');
             }).catch((err)=>{
-              console.log(err,'err')
+              ToastAndroid.show(err.message,2000);
             })
             
           }

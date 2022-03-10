@@ -38,7 +38,7 @@ const SearchInRealTimeScreen = ({navigation}) => {
 
                 <View style={{margin: 10, display:'flex', flexDirection:'row', alignItems:'center', justifyContent: 'center',backgroundColor: 'white',borderRadius:10,
                 }}>
-                    <LottieView source={require('../lottie files/search_lottie.json')} autoPlay loop  style={{height:250, justifyContent: 'center', alignItems: 'center'}}/>
+                    {/* <LottieView source={require('../lottie files/search_lottie.json')} autoPlay loop  style={{height:250, justifyContent: 'center', alignItems: 'center'}}/> */}
                 </View>
 
                 

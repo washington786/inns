@@ -16,6 +16,7 @@ const BookingConfirmation = ({navigation, route,}) => {
 
     const {room} = route.params;
     const {hotel} = route.params;
+    const booking = route.params;
     const {noNights,noAdults,noChild,note,checkInDate,checkOutDate} = route.params;
     const date = moment(checkInDate).format('DD-MMM-YYYY');
     const date2 = moment(checkOutDate).format('DD-MMM-YYYY');
@@ -23,6 +24,9 @@ const BookingConfirmation = ({navigation, route,}) => {
     const id = auth.currentUser.uid;
 
     const [visible, setVisible] = useState(false);
+    console.log("key booking: ", booking.key);
+
+    const time= moment().utcOffset('+02:00').format('HH:MM');
     
     const handleSubmitBooking=async() => {
        
@@ -46,6 +50,7 @@ const BookingConfirmation = ({navigation, route,}) => {
                 hotel_town: hotel.town,
                 hotel_suburb: hotel.suburb,
                 hotel_img: hotel.display_image_url,
+                time: time,
             }).then(()=>{
                 // ToastAndroid.show('You have successfully booked the room',2000)
                 toggleModal()

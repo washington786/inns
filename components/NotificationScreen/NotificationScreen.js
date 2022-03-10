@@ -57,6 +57,7 @@ const NotificationScreen = ({navigation,route}) => {
                     hotel_city: info[k].hotel_city,
                     hotel_town: info[k].hotel_town,
                     hotel_img: info[k].hotel_img,
+                    time: info[k].time,
                     key: k
                 })
               
