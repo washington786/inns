@@ -72,50 +72,7 @@ const StripePaymentScreen = ({navigation,route}) => {
     const [bookings, setBookings] = useState([]);
     const booking = route.params;
 
-    // const notificationKey =route.params;
     const key = booking.key;
-    // const dateIn = moment(booking.check_in_date).format('DD-MMM-YYYY');
-
-    // console.log("================key: ",key,"========================")
-    // const database = db.ref(`/bookings/${notificationKey}/`);
-    // console.log(database); 
-
-    // useEffect(()=>{
-    //     db.ref('/bookings/').on('value',snap=>{
-    //         const bookList = [];
-
-    //         const info = snap.val();
-
-    //         for(let k in info){
-    //             bookList.push({
-    //                 check_in_date: info[k].check_in_date,
-    //                 check_out_date: info[k].check_out_date,
-    //                 no_adults: info[k].no_adults,
-    //                 no_children: info[k].no_children,
-    //                 no_nights: info[k].no_nights,
-    //                 note: info[k].note,
-    //                 payment_status: info[k].payment_status,
-    //                 room_id: info[k].room_id,
-    //                 hotel_id: info[k].hotel_id,
-    //                 total_price: info[k].total_price,
-    //                 user_id: info[k].user_id,
-    //                 hotel_name: info[k].hotel_name,
-    //                 hotel_city: info[k].hotel_city,
-    //                 hotel_town: info[k].hotel_town,
-    //                 hotel_img: info[k].hotel_img,
-    //                 key: k
-    //             })
-              
-    //         }
-    //         setBookings(bookList);
-    //     })
-
-    // },[])
-
-    // routes
-    // const hotel = route.params;
-    // const room = route.params;
-    // const totalPrice = route.params;
 
     for(let i in bookings){
         console.log(bookings[i].key)

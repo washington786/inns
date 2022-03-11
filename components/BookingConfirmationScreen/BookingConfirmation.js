@@ -34,8 +34,8 @@ const BookingConfirmation = ({navigation, route,}) => {
            await db.ref('/bookings/').push({
                 hotel_id: hotel.key,
                 room_id: room.room.key,
-                check_out_date: checkOutDate,
-                check_in_date: checkInDate,
+                check_out_date: date2,
+                check_in_date: date,
                 no_children: noChild,
                 no_adults: noAdults,
                 no_nights: noNights,

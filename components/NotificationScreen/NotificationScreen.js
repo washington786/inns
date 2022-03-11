@@ -83,7 +83,11 @@ const NotificationScreen = ({navigation,route}) => {
 
                     <Text>{notification.notification.hotel_name}</Text>
                     <Text style={{fontSize:12}}> <Icons name="location-pin" size={14} color="#333" style={{paddingRight:5}}/>{notification.notification.hotel_town}</Text>
-                    <Text style={{fontSize: 12, paddingLeft:5}}> Status: <Text style={{color: 'red'}}> {notification.notification.payment_status} Payment</Text>{console.log(notification)}</Text>
+                    {notification.notification.payment_status==="pending"?
+                    <Text style={{fontSize: 12, paddingLeft:5}}> Status: <Text style={{color: 'red'}}>
+                    {notification.notification.payment_status} payment</Text></Text>:<Text style={{color:'grey'}}>
+                    Status: <Text style={{color:'green'}}>{notification.notification.payment_status}</Text>
+                    </Text>}
 
                 </View>
 
@@ -115,15 +119,52 @@ const NotificationScreen = ({navigation,route}) => {
 
             </View>
 
-                <View style={{height:height, width:width, paddingTop:40}}>
+                <ScrollView style={{height:height, width:width}}>
 
-                   <FlatList
-                       data={notification}
-                       renderItem={({item})=><Card notification={item}/>}
-                   />
+                    <View style={{height:height, width:width, paddingTop:0,backgroundColor:'#eee'}}>
 
+                    {notification.map((item)=>{
+                        return(
+                            <Text style={{marginVertical:2, marginHorizontal: 10,width:width*0.94}}>
+                               {
+                                   item.payment_status==='pending'?
+                                   <TouchableOpacity onPress={()=>{toggleModal(item.key)}} style={{width:width*0.94}}>
+
+                                        <View style={{marginVertical:10,marginHorizontal: 5, padding:10, backgroundColor:'#eee', elevation:2, borderRadius:5,display:'flex', flexDirection:'row'}}>
+
+                                        <View style={{borderRadius:100, border: 1, backgroundColor:'#eee000', width:50, height:50}}>
+                                            <Image source={{uri:item.hotel_img}} style={{width:'100%', height:'100%', resizeMode: 'cover', borderRadius:10}}/>
+                                        </View>
+
+                                        <View style={{paddingHorizontal:10}}>
+
+                                            <Text>{item.hotel_name}</Text>
+                                            <Text style={{fontSize:12}}> <Icons name="location-pin" size={14} color="#ff0000" style={{paddingRight:5}}/>{item.hotel_town}</Text>
+                                            {item.payment_status==="pending"?
+                                            <Text style={{fontSize: 12, paddingLeft:5}}> Status: <Text style={{color: 'red'}}>
+                                            {item.payment_status} payment</Text></Text>:<Text style={{color:'grey'}}>
+                                            Status: <Text style={{color:'green'}}>{item.payment_status}</Text>
+                                            </Text>}
+
+                                        </View>
+
+                                        </View>
+
+                                    </TouchableOpacity>:
+                                   <View style={{display: 'none', backgroundColor:'red'}}></View>
+                               
+                               } 
+                            </Text>
+                        )
+                        
+
+                    })}
+                    
                 </View>
 
+
+                </ScrollView>
+                
                 <Modal
                     isVisible={modalVisible}
                     animationIn='zoomIn'
