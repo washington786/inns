@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react'
 import { SafeAreaView,View,Text, Dimensions,TouchableOpacity,StyleSheet,ScrollView, Image,FlatList,ToastAndroid} from 'react-native';
-import Icons from 'react-native-vector-icons/MaterialIcons'
+import Icons from 'react-native-vector-icons/MaterialIcons';
 import {db, auth} from '../firebase-config';
 
 import Modal from 'react-native-modal';

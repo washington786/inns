@@ -58,7 +58,6 @@ const OnboardingScreen = ({navigation}) => {
     return (
         
             <Onboarding 
-
             // components
             SkipButtonComponent={skip}
             NextButtonComponent={Next}

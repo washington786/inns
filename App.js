@@ -41,6 +41,7 @@ import BookingConfirmation from './components/BookingConfirmationScreen/BookingC
 import StripePaymentScreen from './components/StripePaymentScreen/StripePaymentScreen';
 import NotificationScreen from './components/NotificationScreen/NotificationScreen';
 import PaymentSuccessfulScreen from './components/PaymentSuccessful/PaymentSuccessfulScreen';
+import BookingDetailsScreen from './components/Booking/BookingDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -106,6 +107,8 @@ const App=()=> {
           <Stack.Screen options={{headerShown: false}} name="notificationScreen" component={NotificationScreen} />
           {/* payment success */}
           <Stack.Screen options={{headerShown: false}} name="paymentSuccessful" component={PaymentSuccessfulScreen} />
+          {/* booking details screen */}
+          <Stack.Screen options={{headerShown: false}} name="bookingDetails" component={BookingDetailsScreen} />
       </Stack.Navigator>
         )
         
