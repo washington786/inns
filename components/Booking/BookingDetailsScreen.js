@@ -27,11 +27,20 @@ const {bookings} = route.params;
         })}
         
     }
+
+    const handleCancelBooking=()=>{
+        {bookings.map((item)=>{
+            // console.log(item.key);
+            const status = "Canceled";
+            const key = item.key;
+            navigation.navigate('cancel',{key,status});
+        })}
+    }
     
   return (
     <SafeAreaProvider>
         <SafeAreaView style={{height: height, width: width}}>
-            <View style={{height: height, width: width}}>
+            <View style={{height: height, width: width,paddingBottom:120}}>
                  {/* tool bar */}
                 <View style={{ display:'flex',
                     flexDirection: 'row',alignItems:'center',backgroundColor:'#fff', paddingVertical:20,paddingHorizontal:10}}>
@@ -43,22 +52,18 @@ const {bookings} = route.params;
                     </TouchableOpacity>
 
                     <View style={{justifyContent: 'center', width: '100%', flex:1}}>
-                        
-                        {bookings.map((item)=>{
-                            return(
-                            <Text style={{fontSize:16, fontWeight: 'bold',textAlign: 'center',color:'#000'}}>{item.hotel_name}</Text>)
-                        })}
-                        
+                        <Text style={{fontSize:16, fontWeight: 'bold',textAlign: 'center',color:'#000'}}>Booked Hotel Details</Text>
                     </View>
                 </View>
 
                 {/* details*/}
                 <ScrollView style={{height:height, width:width, backgroundColor:'#eee'}}>
 
-                        <View style={{marginVertical:10,marginHorizontal: 10, backgroundColor:'#fff', width: '95%', height: 300,elevation:2}}>
-
-                            {bookings.map((item)=>{
+                            {bookings.map((item,index) => {
+                                
                                 return(
+                                    item.booking_status !=="Checked Out" && item.booking_status !=="Canceled" && item.booking_status !=="Deleted"?
+                                <View key={item.key} style={{marginVertical:10,marginHorizontal: 10, backgroundColor:'#fff', width: '95%', height: 400,elevation:2}}>
                                     <View style={{marginHorizontal: 15, marginVertical: 5}}>
 
                                         <View style={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start'}}>
@@ -100,20 +105,31 @@ const {bookings} = route.params;
                                             <Text style={{paddingLeft: 10, fontWeight: '100', fontSize:16}}><Text style={{color:'#333'}}>{item.note}</Text></Text>
                                         </View>
 
+                                        <View style={{flexDirection:'column', alignItems:'center', justifyContent:'flex-start', paddingHorizontal:10, paddingVertical:10}}>
+                                            <View style={{marginVertical:10,marginHorizontal: 10, width: '95%'}}>
+                                                <TouchableOpacity
+                                                        style={styles.Button}
+                                                        onPress={handleCheckOut}
+                                                        >
+                                                        <Text style={styles.ButtonText}>Check Out</Text>
+                                                </TouchableOpacity>
+                                            </View>
+
+                                            <View style={{marginVertical:10,marginHorizontal: 10, width: '95%'}}>
+                                                <TouchableOpacity
+                                                        style={styles.Button2}
+                                                        onPress={handleCancelBooking}
+                                                        >
+                                                        <Text style={styles.ButtonText2}>Cancel Booking</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+
                                     </View>
+                                </View>:
+                                <></>
                                 )
                             })}
-
-                        </View>
-                        
-                        <View style={{marginVertical:10,marginHorizontal: 10, width: '95%'}}>
-                            <TouchableOpacity
-                                    style={styles.Button}
-                                    onPress={handleCheckOut}
-                                    >
-                                    <Text style={styles.ButtonText}>Check Out</Text>
-                            </TouchableOpacity>
-                        </View>
 
                 </ScrollView>
 
@@ -140,6 +156,23 @@ const styles = StyleSheet.create({
         shadowRadius:3.5,
     },
     ButtonText:{
+        color: '#fff',
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    Button2:{
+        backgroundColor: '#000',
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        borderRadius: 4,
+        marginLeft: 10,
+        elevation: 2,
+        shadowColor:'#333',
+        shadowOffset: {width:2,height:2},
+        shadowOpacity:0.25,
+        shadowRadius:3.5,
+    },
+    ButtonText2:{
         color: '#fff',
         fontSize: 16,
         textAlign: 'center',

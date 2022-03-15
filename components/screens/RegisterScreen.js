@@ -150,12 +150,12 @@ const RegisterScreen = ({navigation}) => {
                                         onChangeText={props.handleChange('phoneNo')}
                                         style={{flex: 1, paddingHorizontal: 12}}
                                         placeholder={'Phone Number'}
-                                        textContentType='telephoneNumber'
+                                        // textContentType='telephoneNumber'
+                                        keyboardType='phone-pad'
                                     />
-
                                 </View>
 
-                                <View style={{
+                            <View style={{
                                 width: '100%', height: 44,backgroundColor: '#F9F9F9',borderRadius:15,shadowColor:'#000',
                                 shadowOffset:{width:0,height:3},shadowOpacity:0.27,shadowRadius:4.65,elevation:6,
                                 paddingHorizontal:10,display: 'flex',flexDirection: 'row',padding:10,

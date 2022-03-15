@@ -52,7 +52,12 @@ const HistoryScreen = ({navigation}) => {
     const handleHistoryDelete=()=>{
         {
             bookingsHistory.map((item)=>{
-                db.ref('bookings').child(item.key).remove().then(
+                const status = "deleted";
+                db.ref('bookings').child(item.key).update(
+                    {
+                        booking_status: status,
+                    }
+                ).then(
                     ToastAndroid.show('You successfully deleted your history item!', 2000),
                     navigation.navigate('bottomTabsScreen')
                 ).catch(
@@ -83,7 +88,7 @@ const HistoryScreen = ({navigation}) => {
                         {/* console.log(item) */}
                         return(
                             item.booking_status==="Checked Out"?
-                            <View style={{backgroundColor:'#fff', marginVertical:10, height:83, padding:5,flexDirection:'row', marginHorizontal: 20, elevation:3, position:'relative'}}>
+                            <View ke={item.key} style={{backgroundColor:'#fff', marginVertical:10, height:83, padding:5,flexDirection:'row', marginHorizontal: 20, elevation:3, position:'relative'}}>
                                     <View style={{paddingHorizontal:5,paddingVertical:1, marginVertical:1, marginHorizontal:3,width:'95%'}}>
                                         <View style={{justifyContent:'space-between', flexDirection: 'row', }}>
                                             <Text style={{fontSize:16, fontWeight:'bold', textTransform:'capitalize'}}>{item.hotel_name}</Text>
@@ -97,7 +102,8 @@ const HistoryScreen = ({navigation}) => {
                                     </View>
                                     <Icons name='delete-circle-outline' size={40} color='red' style={{position:'absolute',bottom:5, right:20}} onPress={handleHistoryDelete}/>
                                 </View>:
-                            <View style={{width: windowWidth, alignItems:'center',justifyContent:'center', marginTop:120}}>
+                            
+                            <View style={{width: windowWidth, alignItems:'center',justifyContent:'center', marginTop:120, display:'none'}}>
 
                                 <Image source={noData} style={{height:150, width:150}}/>
 

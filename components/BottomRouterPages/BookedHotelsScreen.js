@@ -66,56 +66,8 @@ const BookedHotelsScreen = ({navigation}) => {
 
                 <ScrollView style={{height: windowHeight, width: windowWidth, backgroundColor:'white'}}>
 
-                    {bookings.map((item)=>{
-                        return(
-                        item.payment_status==="paid" && item.booking_status==='successful'?
-                        <View style={{height: windowHeight, marginHorizontal: 10, marginVertical: 10}}>
-
-                           {/* note */}
-                           <View style={{ 
-                                marginVertical:10, display:'flex',
-                                flexDirection: 'row',alignItems:'center',
-                                backgroundColor:'#F9F9F9', padding:5,
-                                borderRadius:15
-                                }}>
-
-                                <Icon 
-                                    style={{paddingLeft:5}}
-                                    name="info" 
-                                    size={20}
-                                    color="rgba(0, 0, 0, 0.25)"/>
-
-                                <Text style={{
-                                    fontSize:10, 
-                                    paddingLeft:5,
-                                    color:'rgba(0, 0, 0, 0.45)'
-                                    }}>
-                                    Confirmed and validated (paid) bookings only.
-                                </Text>
-
-                            </View>
-
-                            <TouchableOpacity onPress={()=>navigation.navigate('bookingDetails',{bookings})}>
-                                <View style={{backgroundColor:'#eee', marginVertical:10, height:85, padding:5,flexDirection:'row'}}>
-                                    <View style={{borderRadius:10, height:70, width:70, backgroundColor:'red'}}>
-                                        <Image source={{uri:item.hotel_img}} style={{height:75, width:70, borderRadius:10}}/>
-                                    </View>
-                                    <View style={{paddingHorizontal:5,paddingVertical:1, marginVertical:1, marginHorizontal:3,width:'75%'}}>
-                                        <View style={{justifyContent:'space-between', flexDirection: 'row'}}>
-                                            <Text style={{fontSize:16, fontWeight:'bold', textTransform:'capitalize'}}>{item.hotel_name}</Text>
-                                            <Text>{item.time}</Text>
-                                        </View>
-                                        <View style={{paddingHorizontal:5,paddingVertical:1, marginVertical:1, marginHorizontal:3,width:'75%'}}>
-                                            <Text>Booking Status: <Text style={{color:'green'}}>{item.booking_status}</Text></Text>
-                                            <Text>Nights: {item.no_nights}</Text>
-                                            <Text style={{color:'red'}}>{item.check_in_date}-{item.check_out_date}</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-
-                        </View>:
-
+                    {!bookings.length>1?
+                        <>
                         <View style={{width: windowWidth, alignItems:'center',justifyContent:'center', marginTop:120}}>
 
                             <Image source={noData} style={{height:250, width:250}}/>
@@ -144,7 +96,65 @@ const BookedHotelsScreen = ({navigation}) => {
 
                             </View>
 
-                    </View>)
+                        </View>
+                        </>:
+                        <>
+
+                        </>
+                    }
+
+                    {bookings.map((item)=>{
+                        return(
+                        item.payment_status==="paid" && item.booking_status==='successful'?
+                        <View key={item.key} style={{height: windowHeight, marginHorizontal: 10, marginVertical: 10}}>
+
+                           {/* note */}
+                           <View style={{ 
+                                marginVertical:10, display:'flex',
+                                flexDirection: 'row',alignItems:'center',
+                                backgroundColor:'#F9F9F9', padding:5,
+                                borderRadius:15
+                                }}>
+
+                                <Icon 
+                                    style={{paddingLeft:5}}
+                                    name="info" 
+                                    size={20}
+                                    color="rgba(0, 0, 0, 0.25)"/>
+
+                                <Text style={{
+                                    fontSize:10, 
+                                    paddingLeft:5,
+                                    color:'rgba(0, 0, 0, 0.45)'
+                                    }}>
+                                    Confirmed and validated (paid) bookings only.
+                                </Text>
+
+                            </View>
+
+                            <TouchableOpacity key={item.key} onPress={()=>navigation.navigate('bookingDetails',{bookings})}>
+                                <View style={{backgroundColor:'#eee', marginVertical:10, height:85, padding:5,flexDirection:'row'}}>
+                                    <View style={{borderRadius:10, height:70, width:70, backgroundColor:'red'}}>
+                                        <Image source={{uri:item.hotel_img}} style={{height:75, width:70, borderRadius:10}}/>
+                                    </View>
+                                    <View style={{paddingHorizontal:5,paddingVertical:1, marginVertical:1, marginHorizontal:3,width:'75%'}}>
+                                        <View style={{justifyContent:'space-between', flexDirection: 'row'}}>
+                                            <Text style={{fontSize:16, fontWeight:'bold', textTransform:'capitalize'}}>{item.hotel_name}</Text>
+                                            <Text>{item.time}</Text>
+                                        </View>
+                                        <View style={{paddingHorizontal:5,paddingVertical:1, marginVertical:1, marginHorizontal:3,width:'75%'}}>
+                                            <Text>Booking Status: <Text style={{color:'green'}}>{item.booking_status}</Text></Text>
+                                            <Text>Nights: {item.no_nights}</Text>
+                                            <Text style={{color:'red'}}>{item.check_in_date}-{item.check_out_date}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+
+                        </View>:
+                        <></>
+                        
+                        )
 
                     })}
                     

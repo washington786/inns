@@ -208,7 +208,8 @@ const SelectedHotelDetails = ({navigation, route}) => {
                                 <FlatList
                                     data={room}
                                     Horizontal={true}
-                                    showsHorizontalScrollIndicator={false}
+                                    keyExtractor={(item)=>item.key}
+                                    showsHorizontalScrollIndicator={true}
                                     renderItem={({item})=><Card room={item}/>}
                                 />
 

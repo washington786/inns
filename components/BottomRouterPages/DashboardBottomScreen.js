@@ -26,7 +26,7 @@ const DashboardBottomScreen = ({navigation}) => {
 
                         <View style={{alignSelf:'center', justifyContent: 'center',top: 0}}>
 
-                            <TouchableOpacity onPress={()=>navigation.navigate('searchInScreen')} 
+                            <TouchableOpacity onPress={()=>navigation.navigate('newSearchScreen')} 
                             style={styles.buttonSearch}>
 
                             <Ico name="search" size={20} color="#C99E30"/>

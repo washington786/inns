@@ -14,7 +14,7 @@ const TopNavigatorDashboardScreen = ({navigation}) => {
 
                 <View style={{alignSelf:'center', justifyContent: 'center', position: 'relative', width: '90%',top: 10}}>
                     {/* button to explore */}
-                        <TouchableOpacity onPress={()=>navigation.navigate('searchInScreen')} 
+                        <TouchableOpacity onPress={()=>navigation.navigate('newSearchScreen')} 
                         style={styles.buttonSearch}>
 
                             <Fontisto name="search" size={20} color="#C99E30"/>
@@ -32,7 +32,7 @@ const TopNavigatorDashboardScreen = ({navigation}) => {
                         
                         <FlatList
                         style={{marginBottom:150}}
-                        data={hotel}
+                        // data={hotel}
                         renderItem={
                             ({item})=>
                             <TouchableOpacity onPress={()=>navigation.navigate('selectedDetailsScreen')}><Hotels hotel={item}

@@ -1,5 +1,5 @@
 import React,{ useEffect,useState} from 'react'
-import {StyleSheet, View,Image, Text,SafeAreaView,TouchableOpacity,FlatList} from 'react-native';
+import {StyleSheet, View,Image, Text,SafeAreaView,TouchableOpacity,FlatList,TextInput} from 'react-native';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {db} from '../firebase-config';
@@ -9,7 +9,64 @@ import {db} from '../firebase-config';
 
 const Hotels = ({navigation}) => {
 
+    const [search, setSearch] = useState('');
+    const [filteredDataSource, setFilteredDataSource] = useState([]);
+    const [masterDataSource, setMasterDataSource] = useState([]);
+
     const [hotel,setHotel] = useState([]);
+
+    const searchFilterFunction = (text) => {
+
+        if (text) {
+          const newData = masterDataSource.filter(
+            function (item) {
+              const itemData = item.name
+                ? item.name.toUpperCase()
+                : ''.toUpperCase();
+              const textData = text.toUpperCase();
+              return itemData.indexOf(textData) > -1;
+          });
+        //   setFilteredDataSource(newData);
+        setHotel(newData);
+          setSearch(text);
+        } else {
+          // Inserted text is blank
+          // Update FilteredDataSource with masterDataSource
+          setFilteredDataSource(masterDataSource);
+          setSearch(text);
+        }
+      };
+    
+      const ItemView = ({item}) => {
+        return (
+          // Flat List Item
+          <Text
+            style={styles.itemStyle}
+            onPress={() => getItem(item)}>
+            {item.id}
+            {'.'}
+            {item.name.toUpperCase()}
+          </Text>
+        );
+      };
+    
+      const ItemSeparatorView = () => {
+        return (
+          // Flat List Item Separator
+          <View
+            style={{
+              height: 0.5,
+              width: '100%',
+              backgroundColor: '#C8C8C8',
+            }}
+          />
+        );
+      };
+    
+      const getItem = (item) => {
+        // Function for click on an item
+        alert('Id : ' + item.id + ' Title : ' + item.name);
+      };
 
     useEffect(()=>{
         db.ref('/hotels/').on('value',snap=>{
@@ -45,6 +102,7 @@ const Hotels = ({navigation}) => {
              })
          }
             setHotel(hotelList);
+            setMasterDataSource(hotelList);
             // console.log(hotelList);
         })
     },[])
@@ -96,18 +154,39 @@ const Hotels = ({navigation}) => {
 
                 <View style={{alignSelf:'center', justifyContent: 'center', position: 'relative', width: '90%',top: 10}}>
                     {/* button to explore */}
-                        <TouchableOpacity onPress={()=>navigation.navigate('searchInScreen')} 
+                        {/* <TouchableOpacity onPress={()=>navigation.navigate('searchInScreen')} 
                         style={styles.buttonSearch}>
 
                             <Fontisto name="search" size={20} color="#C99E30"/>
                             <Text style={styles.buttonSearchText}>Where would you like to go? </Text>
                         
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
+                        <View style={{
+                    width: '90%', height: 44,backgroundColor: '#F9F9F9',borderRadius:5,shadowColor:'#000',
+                    shadowOffset:{width:0,height:3},shadowOpacity:0.27,shadowRadius:4.65,elevation:6,
+                    paddingHorizontal:10,display: 'flex',flexDirection: 'row',padding:10,
+                    alignItems:'center', marginLeft:15}}>
+
+                        <Icons
+                            color='rgba(0, 0, 0, 0.25)'
+                            name='search'
+                            type='font-awesome'
+                            size={20}
+                        />
+                        
+                        <TextInput
+                            style={{flex: 1, paddingHorizontal: 12}}
+                            placeholder="Where would you like to go?"
+                            onChangeText={(text) => searchFilterFunction(text)}
+                            value={search}
+                        />
+
+                    </View>
                 </View>
 
 
                 {/* content view */}
-                <View style={{marginHorizontal:15, position:'relative', backgroundColor: 'white', top: 95}}>
+                <View style={{marginHorizontal:15, position:'relative', backgroundColor: 'white', top: 30}}>
                     <Text style={{fontWeight: 'bold', fontSize:20, marginHorizontal:10}}>Explore Nearby Places</Text>
 
                     <View style={{top:10, paddingBottom:250}}>
@@ -116,6 +195,8 @@ const Hotels = ({navigation}) => {
                             style={{marginVertical:10,paddingBottom: 40}}
                             data={hotel}
                             Vertical
+                            onChangeText={(text) => searchFilterFunction(text)}
+                            value={search}
                             renderItem={({item})=><Card hotel={item}/>}
                         />
                     </View>

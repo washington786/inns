@@ -20,7 +20,7 @@ const ForgotPassword = ({navigation}) => {
             ToastAndroid.show('Email reset link has been sent to ' + emailAddress, 2000)
             navigation.navigate('resetSuccessScreen')
         }).catch((err)=>{
-            ToastAndroid.CENTER.show(err.message);
+            ToastAndroid.show(err.message);
         })
     }
 
