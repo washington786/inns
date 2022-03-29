@@ -1,7 +1,8 @@
 import React,{useState,useEffect} from 'react'
-import { View,Dimensions,Image,Text} from 'react-native'
-import test from '../Images/dash/vacations.jpg';
+import { View,Dimensions,Image,Text,TouchableOpacity} from 'react-native'
 import {db} from '../firebase-config';
+
+import { useNavigation } from '@react-navigation/native';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -9,7 +10,7 @@ const width = Dimensions.get('window').width;
 // icons
 import Icons from 'react-native-vector-icons/FontAwesome5'
 
-const MapCarousel = (props) => {
+const MapCarousel = () => {
 
     // const data = props.data;
     const [hotel,setHotel] = useState([]);
@@ -48,29 +49,42 @@ const MapCarousel = (props) => {
              })
          }
             setHotel(hotelList);
-            // console.log(hotelList);
         })
     },[])
 
+    const navigation = useNavigation();
+
     return (
-        <View style={{ height:height*0.15, marginHorizontal: 10, borderRadius:15, display:'flex',flexDirection: 'row',backgroundColor: '#fff',elevation:5}}>
+        
+        <>
+        
+            {hotel.map((hotel)=>{
+                return (
+                <TouchableOpacity onPress={()=>navigation.navigate('selectedDetailsScreen',{hotel})} key={hotel.key}>
+                        <View style={{ height:height*0.15, marginHorizontal: 10, borderRadius:15, display:'flex',flexDirection: 'row',backgroundColor: '#fff',elevation:5}}>
 
-            <Image style={{width:width*0.4, height:height*0.15, borderRadius:10}} source={{uri:hotel.display_image_url}}/>
-            <View style={{marginHorizontal:10, marginVertical:15}}>
-                <View style={{display: 'flex', flexDirection: 'row', textAlign: 'center', justifyContent: 'flex-start', alignItems: 'center'}}>
-                    <Icons name='hotel' size={20} color={'grey'}/>
-                    <Text style={{fontWeight: 'bold',fontSize:18,padding:5, letterSpacing:2}}>{hotel.name}</Text>
-                </View>
+                        <Image style={{width:width*0.4, height:height*0.15, borderRadius:10}} source={{uri:hotel.display_image_url}}/>
+                        <View style={{marginHorizontal:10, marginVertical:15}}>
+                            <View style={{display: 'flex', flexDirection: 'row', textAlign: 'center', justifyContent: 'flex-start', alignhotels: 'center'}}>
+                                <Icons name='hotel' size={20} color={'grey'}/>
+                                <Text style={{fontWeight: 'bold',fontSize:18,padding:5, letterSpacing:2}}>{hotel.name}</Text>
+                            </View>
 
-                {/* description */}
-                <Text style={{fontWeight: '100',fontSize:10, paddingTop:5, color:'grey', width:width*0.49, paddingVertical:10}}>{hotel.description}</Text>
+                            {/* description */}
+                            <Text style={{fontWeight: '100',fontSize:10, paddingTop:5, color:'grey', width:width*0.49, paddingVertical:10}}>{hotel.description}</Text>
 
-                {/* price */}
-                <Text style={{fontWeight: 'bold',fontSize:15,letterSpacing:0.5, paddingTop:5, color:'#C99E30'}}>{hotel.suburb}, {hotel.town}</Text>
-                    
-            </View>
+                            {/* price */}
+                            <Text style={{fontWeight: 'bold',fontSize:15,letterSpacing:0.5, paddingTop:5, color:'#C99E30'}}>{hotel.suburb}, {hotel.town}</Text>
+                                
+                        </View>
 
-        </View>
+                        </View>
+                </TouchableOpacity>
+                )
+            })}
+        
+        </>
+        
     )
 }
 

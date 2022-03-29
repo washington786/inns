@@ -14,7 +14,7 @@ import places from '../Data/hotelData';
 import CustomMapMarker from '../CustomMapMarker/CustomMapMarker';
 import MapCarousel from '../MapCarousel/MapCarousel';
 
-const TopNavigatorMapsScreens = ({navigation}) => {
+const TopNavigatorMapsScreens = () => {
 
     const [selectedPlaceId, setSelectedPlaceId] = useState(null);
 
@@ -92,32 +92,6 @@ const TopNavigatorMapsScreens = ({navigation}) => {
           })
       },[])
 
-    const MapCarouselCard=({hotel})=>{
-        return (
-            <TouchableOpacity onPress={()=>navigation.navigate('selectedDetailsScreen', {hotel})}>
-                <View style={{ height:height*0.15, marginHorizontal: 10, borderRadius:15, display:'flex',flexDirection: 'row',backgroundColor: '#fff',elevation:5}}>
-
-                    <Image style={{width:width*0.4, height:height*0.15, borderRadius:10}} source={{uri:hotel.display_image_url}}/>
-
-                    <View style={{marginHorizontal:10, marginVertical:15}}>
-                        <View style={{display: 'flex', flexDirection: 'row', textAlign: 'center', justifyContent: 'flex-start', alignItems: 'center'}}>
-                            <Icons name='hotel' size={20} color={'grey'}/>
-                            <Text style={{fontWeight: 'bold',fontSize:18,padding:5, letterSpacing:2}}>name</Text>
-                        </View>
-
-                        {/* description */}
-                        <Text style={{fontWeight: '100',fontSize:10, paddingTop:5, color:'grey', width:width*0.49, paddingVertical:10}}>description</Text>
-
-                        {/* price */}
-                        <Text style={{fontWeight: 'bold',fontSize:15,letterSpacing:0.5, paddingTop:5, color:'#C99E30'}}>town and suburb</Text>
-                            
-                    </View>
-
-                </View>
-            </TouchableOpacity>
-        )
-    }
-
     return (
         <View style={{height: height, width: width}}>
             <MapView
@@ -151,8 +125,9 @@ const TopNavigatorMapsScreens = ({navigation}) => {
 
                 <FlatList
                     ref={flatList}
-                    data={places}
+                    data={hotel}
                     renderItem={({item})=><MapCarousel data={item}/>}
+                    keyExtractor = {(item)=>item.id}
                     horizontal 
                     showsHorizontalScrollIndicator={false}
                     snapToInterval={width}
