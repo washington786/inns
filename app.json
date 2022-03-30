@@ -20,6 +20,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "interimmodels.innsApp",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -27,6 +28,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "hotel-system",
+    "githubUrl": "https://github.com/washington786"
   }
 }
